@@ -1,0 +1,7 @@
+# depslib dependency file v1.0
+1662990168 source:c:\users\user\documents\backup\school\course\y2s1\algo analysis\lab 1\mergesort\main.c
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+	<string.h>
+
