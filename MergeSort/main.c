@@ -1,7 +1,5 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <time.h>
-#include <string.h>
 
 int count = 0;
 
@@ -143,77 +141,99 @@ void reset(int *list1, int *list2, int size)
 
 int main()
 {
-    int size;
     int *list1, *list2;
     double time_spent = 0;
-
-
-
-    printf("Please enter array size: ");
-    scanf("%d",&size);
-    list1 = (int*)malloc(size*sizeof(int));
-    list2 = (int*)malloc(size*sizeof(int));
-    Randomizer(list1,list2,size);
-    printf("Mergesort\n");
-    //printf("Before Sorting:\n");
-    //printArrary(list1,size);
-    clock_t start = clock();
-    MergeSort(list1,0,size-1);
-    //InsertionSort(list1,0,size-1);
-    clock_t end = clock();
-    time_spent += (double)(end - start) / CLOCKS_PER_SEC;
-    //printf("\nAfter Sorting:\n");
-    //printArrary(list1,size);
-    printf("\nNumber of comparison for Mergesort: %d\n",count);
-    printf("MergeSort took %f seconds to sort\n\n",time_spent);
-    printf("MergeHybrid\n");
-
-    for(int total_run = 0; total_run < 100; total_run++){
-        Randomizer(list1,list2,size);
-        FILE *fptr1,*fptr2;
+    for(int total_run = 0; total_run < 1; total_run++){
+        FILE *fptr1,*fptr2, *fptr3, *fptr4;
         int length = snprintf( NULL, 0, "%d", total_run );
         char* str11 = malloc( length + 1 );
         snprintf( str11, length + 1, "%d", total_run );
         char str12[] = ".txt";
 
         //printf(str);
-        char file1[] = "C:\\Users\\USER\\Documents\\Github\\Algo_Analysis_Performance\\Data\\count";
+        char file1[100] = "C:\\Users\\USER\\Documents\\Github\\Algo_Analysis_Performance\\Data\\MergeCount";
         strcat(file1,str11);
         strcat(file1,str12);
-        //printf(file1);
 
         char* str21 = malloc( length + 1 );
         snprintf( str21, length + 1, "%d", total_run );
         char str22[] = ".txt";
 
-        char file2[] = "C:\\Users\\USER\\Documents\\Github\\Algo_Analysis_Performance\\Data\\delay";
+        char file2[100] = "C:\\Users\\USER\\Documents\\Github\\Algo_Analysis_Performance\\Data\\MergeDelay";
         strcat(file2,str21);
         strcat(file2,str22);
-        //printf(file2);
 
-        //printf(file1);
+        char* str31 = malloc( length + 1 );
+        snprintf( str31, length + 1, "%d", total_run );
+        char str32[] = ".txt";
+
+        char file3[100] = "C:\\Users\\USER\\Documents\\Github\\Algo_Analysis_Performance\\Data\\MergeHybridCount";
+        strcat(file3,str31);
+        strcat(file3,str32);
+
+
+        char* str41 = malloc( length + 1 );
+        snprintf( str41, length + 1, "%d", total_run );
+        char str42[] = ".txt";
+
+        char file4[100] = "C:\\Users\\USER\\Documents\\Github\\Algo_Analysis_Performance\\Data\\MergeHybridDelay";
+        strcat(file4,str41);
+
+        strcat(file4,str42);
+
         fptr1 = fopen(file1,"w");
         fptr2 = fopen(file2,"w");
-        for(int s=0 ; s <= 100 ; s++)
+        fptr3 = fopen(file3,"w");
+        fptr4 = fopen(file4,"w");
+
+        for (int size = 100 ; size <= 1000000 ; size += 100)
         {
-            reset(list1, list2, size);
             count = 0;
             time_spent = 0;
-            printf("S value: %d\n",s);
+            printf("Array Size: %d\n========================\n",size);
+            list1 = (int*)malloc(size*sizeof(int));
+            list2 = (int*)malloc(size*sizeof(int));
+            Randomizer(list1,list2,size);
+            printf("Mergesort\n------------------------\n");
             //printf("Before Sorting:\n");
             //printArrary(list1,size);
-            start = clock();
-            MergeHybrid(list1,0,size-1,s);
-            end = clock();
+            clock_t start = clock();
+            MergeSort(list1,0,size-1);
+            //InsertionSort(list1,0,size-1);
+            clock_t end = clock();
             time_spent += (double)(end - start) / CLOCKS_PER_SEC;
             //printf("\nAfter Sorting:\n");
             //printArrary(list1,size);
-            //printf("\nNumber of comparison for MergeHybird: %d\n",count);
+            printf("\nNumber of comparison for Mergesort: %d\n",count);
             fprintf(fptr1,"%d\n",count);
-            //printf("MergeSort took %f seconds to sort\n\n",time_spent);
+            printf("MergeSort took %f seconds to sort\n\n",time_spent);
             fprintf(fptr2,"%f\n",time_spent);
+            printf("MergeHybrid\n");
+            for(int s=10 ; s <= 10 ; s++)
+            {
+                reset(list1, list2, size);
+                count = 0;
+                time_spent = 0;
+                printf("S value: %d\n------------------------\n",s);
+                //printf("Before Sorting:\n");
+                //printArrary(list1,size);
+                start = clock();
+                MergeHybrid(list1,0,size-1,s);
+                end = clock();
+                time_spent += (double)(end - start) / CLOCKS_PER_SEC;
+                //printf("\nAfter Sorting:\n");
+                //printArrary(list1,size);
+                printf("\nNumber of comparison for MergeHybird: %d\n",count);
+                fprintf(fptr3,"%d\n",count);
+                printf("MergeSort took %f seconds to sort\n\n",time_spent);
+                fprintf(fptr4,"%f\n",time_spent);
+            }
+            free(list1);
+            free(list2);
         }
-    fclose(fptr1);
-    fclose(fptr2);
+        fclose(fptr1);
+        fclose(fptr2);
+        fclose(fptr3);
+        fclose(fptr4);
     }
 }
