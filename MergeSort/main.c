@@ -174,7 +174,7 @@ int main()
         char str12[] = ".txt";
 
         //printf(str);
-        char file1[100] = "C:\\Users\\USER\\Documents\\Github\\Algo_Analysis_Performance\\Data\\WorstCaseN\\MergeCount";
+        char file1[100] = "C:\\Users\\USER\\Documents\\Github\\Algo_Analysis_Performance\\Data\\AverageCaseN\\MergeCount";
         strcat(file1,str11);
         strcat(file1,str12);
 
@@ -182,7 +182,7 @@ int main()
         snprintf( str21, length + 1, "%d", total_run );
         char str22[] = ".txt";
 
-        char file2[100] = "C:\\Users\\USER\\Documents\\Github\\Algo_Analysis_Performance\\Data\\WorstCaseN\\MergeDelay";
+        char file2[100] = "C:\\Users\\USER\\Documents\\Github\\Algo_Analysis_Performance\\Data\\AverageCaseN\\MergeDelay";
         strcat(file2,str21);
         strcat(file2,str22);
 
@@ -190,7 +190,7 @@ int main()
         snprintf( str31, length + 1, "%d", total_run );
         char str32[] = ".txt";
 
-        char file3[100] = "C:\\Users\\USER\\Documents\\Github\\Algo_Analysis_Performance\\Data\\WorstCaseN\\MergeHybridCount";
+        char file3[100] = "C:\\Users\\USER\\Documents\\Github\\Algo_Analysis_Performance\\Data\\AverageCaseN\\MergeHybridCount";
         strcat(file3,str31);
         strcat(file3,str32);
 
@@ -199,7 +199,7 @@ int main()
         snprintf( str41, length + 1, "%d", total_run );
         char str42[] = ".txt";
 
-        char file4[100] = "C:\\Users\\USER\\Documents\\Github\\Algo_Analysis_Performance\\Data\\WorstCaseN\\MergeHybridDelay";
+        char file4[100] = "C:\\Users\\USER\\Documents\\Github\\Algo_Analysis_Performance\\Data\\AverageCaseN\\MergeHybridDelay";
         strcat(file4,str41);
         strcat(file4,str42);
 
@@ -214,7 +214,7 @@ int main()
             printf("Array Size: %d\n========================\n",size);
             list1 = (int*)malloc(size*sizeof(int));
             list2 = (int*)malloc(size*sizeof(int));
-            WorstCase(list1,list2,size);
+            Randomizer(list1,list2,size);
             printf("Mergesort\n------------------------\n");
             //printf("Before Sorting:\n");
             //printArrary(list1,size);
