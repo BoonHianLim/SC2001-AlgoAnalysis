@@ -123,6 +123,26 @@ void Randomizer(int *list1, int *list2, int size)
     }
 }
 
+void BestCase(int *list1, int *list2, int size)
+{
+    time_t t1;
+    srand( (unsigned) time (&t1));
+    for (int i=0 ; i<size ; i++)
+    {
+        list1[i] = list2[i] = 1;
+    }
+}
+
+void WorstCase(int *list1, int *list2, int size)
+{
+    time_t t1;
+    srand( (unsigned) time (&t1));
+    for (int i=0 ; i<size ; i++)
+    {
+        list1[i] = list2[i] = size - i;
+    }
+}
+
 void printArrary(int *list, int size)
 {
     for(int i=0 ; i < size ; i++)
@@ -130,6 +150,7 @@ void printArrary(int *list, int size)
         printf("%d ",list[i]);
     }
 }
+
 
 void reset(int *list1, int *list2, int size)
 {
@@ -139,11 +160,13 @@ void reset(int *list1, int *list2, int size)
     }
 }
 
+
+
 int main()
 {
     int *list1, *list2;
     double time_spent = 0;
-    for(int total_run = 0; total_run < 1; total_run++){
+    for(int total_run = 0; total_run < 20; total_run++){
         FILE *fptr1,*fptr2, *fptr3, *fptr4;
         int length = snprintf( NULL, 0, "%d", total_run );
         char* str11 = malloc( length + 1 );
@@ -151,7 +174,7 @@ int main()
         char str12[] = ".txt";
 
         //printf(str);
-        char file1[100] = "C:\\Users\\USER\\Documents\\Github\\Algo_Analysis_Performance\\Data\\MergeCount";
+        char file1[100] = "C:\\Users\\USER\\Documents\\Github\\Algo_Analysis_Performance\\Data\\WorstCaseN\\MergeCount";
         strcat(file1,str11);
         strcat(file1,str12);
 
@@ -159,7 +182,7 @@ int main()
         snprintf( str21, length + 1, "%d", total_run );
         char str22[] = ".txt";
 
-        char file2[100] = "C:\\Users\\USER\\Documents\\Github\\Algo_Analysis_Performance\\Data\\MergeDelay";
+        char file2[100] = "C:\\Users\\USER\\Documents\\Github\\Algo_Analysis_Performance\\Data\\WorstCaseN\\MergeDelay";
         strcat(file2,str21);
         strcat(file2,str22);
 
@@ -167,7 +190,7 @@ int main()
         snprintf( str31, length + 1, "%d", total_run );
         char str32[] = ".txt";
 
-        char file3[100] = "C:\\Users\\USER\\Documents\\Github\\Algo_Analysis_Performance\\Data\\MergeHybridCount";
+        char file3[100] = "C:\\Users\\USER\\Documents\\Github\\Algo_Analysis_Performance\\Data\\WorstCaseN\\MergeHybridCount";
         strcat(file3,str31);
         strcat(file3,str32);
 
@@ -176,24 +199,22 @@ int main()
         snprintf( str41, length + 1, "%d", total_run );
         char str42[] = ".txt";
 
-        char file4[100] = "C:\\Users\\USER\\Documents\\Github\\Algo_Analysis_Performance\\Data\\MergeHybridDelay";
+        char file4[100] = "C:\\Users\\USER\\Documents\\Github\\Algo_Analysis_Performance\\Data\\WorstCaseN\\MergeHybridDelay";
         strcat(file4,str41);
-
         strcat(file4,str42);
 
         fptr1 = fopen(file1,"w");
         fptr2 = fopen(file2,"w");
         fptr3 = fopen(file3,"w");
         fptr4 = fopen(file4,"w");
-
-        for (int size = 100 ; size <= 1000000 ; size += 100)
+        for (int size = 1 ; size <= 10000000 ; size *= 10)
         {
             count = 0;
             time_spent = 0;
             printf("Array Size: %d\n========================\n",size);
             list1 = (int*)malloc(size*sizeof(int));
             list2 = (int*)malloc(size*sizeof(int));
-            Randomizer(list1,list2,size);
+            WorstCase(list1,list2,size);
             printf("Mergesort\n------------------------\n");
             //printf("Before Sorting:\n");
             //printArrary(list1,size);
@@ -209,7 +230,7 @@ int main()
             printf("MergeSort took %f seconds to sort\n\n",time_spent);
             fprintf(fptr2,"%f\n",time_spent);
             printf("MergeHybrid\n");
-            for(int s=10 ; s <= 10 ; s++)
+            for(int s = 16 ; s <= 16 ; s++)
             {
                 reset(list1, list2, size);
                 count = 0;
@@ -225,7 +246,7 @@ int main()
                 //printArrary(list1,size);
                 printf("\nNumber of comparison for MergeHybird: %d\n",count);
                 fprintf(fptr3,"%d\n",count);
-                printf("MergeSort took %f seconds to sort\n\n",time_spent);
+                printf("MergeHybrid took %f seconds to sort\n\n",time_spent);
                 fprintf(fptr4,"%f\n",time_spent);
             }
             free(list1);
