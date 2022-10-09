@@ -174,7 +174,7 @@ int main()
         char str12[] = ".txt";
 
         //printf(str);
-        char file1[100] = "C:\\Users\\USER\\Documents\\Github\\Algo_Analysis_Performance\\Data\\AverageCaseN\\MergeCount";
+        char file1[120] = "C:\\Users\\USER\\Documents\\Github\\Algo_Analysis_Performance\\Data\\N100000\\Worst\\MergeCount";
         strcat(file1,str11);
         strcat(file1,str12);
 
@@ -182,7 +182,7 @@ int main()
         snprintf( str21, length + 1, "%d", total_run );
         char str22[] = ".txt";
 
-        char file2[100] = "C:\\Users\\USER\\Documents\\Github\\Algo_Analysis_Performance\\Data\\AverageCaseN\\MergeDelay";
+        char file2[120] = "C:\\Users\\USER\\Documents\\Github\\Algo_Analysis_Performance\\Data\\N100000\\Worst\\MergeDelay";
         strcat(file2,str21);
         strcat(file2,str22);
 
@@ -190,7 +190,7 @@ int main()
         snprintf( str31, length + 1, "%d", total_run );
         char str32[] = ".txt";
 
-        char file3[100] = "C:\\Users\\USER\\Documents\\Github\\Algo_Analysis_Performance\\Data\\AverageCaseN\\MergeHybridCount";
+        char file3[120] = "C:\\Users\\USER\\Documents\\Github\\Algo_Analysis_Performance\\Data\\N100000\\Worst\\MergeHybridCount";
         strcat(file3,str31);
         strcat(file3,str32);
 
@@ -199,7 +199,7 @@ int main()
         snprintf( str41, length + 1, "%d", total_run );
         char str42[] = ".txt";
 
-        char file4[100] = "C:\\Users\\USER\\Documents\\Github\\Algo_Analysis_Performance\\Data\\AverageCaseN\\MergeHybridDelay";
+        char file4[120] = "C:\\Users\\USER\\Documents\\Github\\Algo_Analysis_Performance\\Data\\N100000\\Worst\\MergeHybridDelay";
         strcat(file4,str41);
         strcat(file4,str42);
 
@@ -207,14 +207,14 @@ int main()
         fptr2 = fopen(file2,"w");
         fptr3 = fopen(file3,"w");
         fptr4 = fopen(file4,"w");
-        for (int size = 1 ; size <= 10000000 ; size *= 10)
+        for (int size = 100000 ; size <= 100000 ; size *= 10)
         {
             count = 0;
             time_spent = 0;
             printf("Array Size: %d\n========================\n",size);
             list1 = (int*)malloc(size*sizeof(int));
             list2 = (int*)malloc(size*sizeof(int));
-            Randomizer(list1,list2,size);
+            WorstCase(list1,list2,size);
             printf("Mergesort\n------------------------\n");
             //printf("Before Sorting:\n");
             //printArrary(list1,size);
@@ -230,7 +230,7 @@ int main()
             printf("MergeSort took %f seconds to sort\n\n",time_spent);
             fprintf(fptr2,"%f\n",time_spent);
             printf("MergeHybrid\n");
-            for(int s = 16 ; s <= 16 ; s++)
+            for(int s = 0 ; s <= 100 ; s++)
             {
                 reset(list1, list2, size);
                 count = 0;
