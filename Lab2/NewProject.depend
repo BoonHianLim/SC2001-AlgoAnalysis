@@ -1,0 +1,7 @@
+# depslib dependency file v1.0
+1664875270 source:c:\users\user\documents\backup\school\course\y2s1\algo analysis\lab 2\newproject\main.c
+	<stdio.h>
+	<stdlib.h>
+	<limits.h>
+	<time.h>
+
