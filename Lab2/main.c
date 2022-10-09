@@ -236,6 +236,9 @@ void Dijkstra_1(Graph g, int source)
         //printArrays(d,pi,S,g.V);
     }
     //printArrays(d_1,pi_1,S_1,g.V);
+    free(d_1);
+    free(pi_1);
+    free(S_1);
 }
 
 void swap(QueueNode q[], int a, int b)
@@ -381,6 +384,9 @@ void Dijkstra_2(Graph g, int source)
         }
     }
     //printArrays(d,pi,S,g.V);
+    free(d);
+    free(pi);
+    free(S);
 }
 
 void pigeonRand(Graph g){
@@ -534,15 +540,15 @@ int main()
     printf("no_e: %d\n",no_e);*/
     char *name1,*name2;
     name1 = (char *) malloc (50*sizeof(char));
-    name1 = "data1000\\connectedPar1.csv";
+    name1 = "data10000\\connectedPar1.csv";
     name2 = (char *) malloc (50*sizeof(char));
-    name2 = "data1000\\connectedPar2.csv";
+    name2 = "data10000\\connectedPar2.csv";
 
     FILE *fpt1,*fpt2;
     fpt1 = fopen(name1, "w+");
     fpt2 = fopen(name2, "w+");
 
-    for(int edge = 0;edge<=numEdges;edge+=numEdges/50){
+    for(int edge = 0;edge<=numEdges;edge+=numEdges/20){
         
         printf("%d:\n",edge);
         g.E = 0;
@@ -592,6 +598,7 @@ int main()
         for(i=0 ; i<g.V ; i++)
             free(g.adj.matrix[i]);
         free(g.adj.matrix);
+        free(degreeV);
     }
     fclose(fpt1);
     fclose(fpt2);
