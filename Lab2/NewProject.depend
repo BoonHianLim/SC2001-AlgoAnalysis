@@ -5,3 +5,10 @@
 	<limits.h>
 	<time.h>
 
+1665364979 source:c:\users\limb0061\downloads\lab2\main.c
+	<stdio.h>
+	<stdlib.h>
+	<limits.h>
+	<time.h>
+	<inttypes.h>
+

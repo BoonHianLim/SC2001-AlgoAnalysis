@@ -424,12 +424,12 @@ void totalRand(Graph g, int numEdges){
         V1 = rand();
         V1 = (V1 << 32) | rand();
         V1 = (V1 % (g.V - 0)) + 0;
-        
+
         V2 = rand();
         V2 = (V2 << 32) | rand();
         V2 = (V2 % (g.V - 0)) + 0;
-        
-        
+
+
         while(g.adj.matrix[V1][V2] != 0){
             int addWhich = rand()%2;
 
@@ -445,8 +445,8 @@ void totalRand(Graph g, int numEdges){
                 }else{
                     V2 = 0;
                 }
-                
-            }        
+
+            }
         }
 
         g.adj.matrix[V1][V2] = rand()%g.V+1;
@@ -492,11 +492,13 @@ void connectedRand(Graph g, int numEdges){
         connectedV[connectedSize] = unconnectedVertex;
         connectedSize++;
     }
-    
+
     int left = numEdges - connectedSize + 1;
     if(left > 0){
         totalRand(g, left);
     }
+    free(connectedV);
+    free(connected);
 }
 
 void weightRand(Graph g){
@@ -504,7 +506,7 @@ void weightRand(Graph g){
     time_t t1;
     srand( (unsigned) time (&t1));
     uint64_t num;
-    
+
 
     for(int i=0 ; i<g.V ; i++)
     {
@@ -513,13 +515,14 @@ void weightRand(Graph g){
             num = (num << 32) | rand();
             num = (num % (MAX - 1)) + 1;
             g.adj.matrix[i][j] = num;
-        } 
+        }
     }
 }
 
 int main()
 {
-    
+    struct timespec tstart={0,0}, tend={0,0};
+
     Graph g;
     int i,j, source, numEdges;
     int *degreeV;
@@ -531,11 +534,11 @@ int main()
     printf("Enter the max number of vertices: ");
     scanf("%d",&numEdges);
 
-    
 
-    
 
-    
+
+
+
     /*int no_e = rand()%max_e + 1;
     printf("no_e: %d\n",no_e);*/
     char *name1,*name2;
@@ -549,7 +552,7 @@ int main()
     fpt2 = fopen(name2, "w+");
 
     for(int edge = 0;edge<=numEdges;edge+=numEdges/20){
-        
+
         printf("%d:\n",edge);
         g.E = 0;
         g.adj.matrix = (int **)malloc(g.V*sizeof(int *));
@@ -565,7 +568,7 @@ int main()
         for(i=0 ; i<g.V ; i++)
             degreeV[i] = 0;
 
-        
+
 
         //printf("Partial Connected\n");
         totalRand(g,edge);
@@ -573,27 +576,40 @@ int main()
                 //printGraphMatrix(g);
         //printf("Dijkstra 1:\n");
 
-        time_spent = 0;
-        start = clock();
-        Dijkstra_1(g,1);
-        end = clock();
-        time_spent += (double)(end - start) / CLOCKS_PER_SEC;
+        time_t t1;
+        srand( (unsigned) time (&t1));
+        uint64_t vertex;
+        vertex = rand();
+        vertex = (vertex << 32) | rand();
+        vertex = (vertex % (g.V - 0)) + 0;
 
-        fprintf(fpt1,"%d %f\n", edge,time_spent);
-        
+        clock_gettime(CLOCK_MONOTONIC, &tstart);
+        Dijkstra_1(g,vertex);
+        clock_gettime(CLOCK_MONOTONIC, &tend);
+        printf("Dijkstra_1 took about %.5f seconds\n",
+           ((double)tend.tv_sec + 1.0e-9*tend.tv_nsec) -
+           ((double)tstart.tv_sec + 1.0e-9*tstart.tv_nsec));
+
+        //printf("%f\n",time_spent);
+        fprintf(fpt1,"%d %f\n", edge,((double)tend.tv_sec + 1.0e-9*tend.tv_nsec) -
+           ((double)tstart.tv_sec + 1.0e-9*tstart.tv_nsec));
+
 
         //printf("\n");
         adjM2adjL(&g);
         //printGraphList(g);
         //printf("Dijkstra 2:\n");
 
-        time_spent = 0;
-        start = clock();
-        Dijkstra_2(g,1);
-        end = clock();
-        time_spent += (double)(end - start) / CLOCKS_PER_SEC;
+        clock_gettime(CLOCK_MONOTONIC, &tstart);
+        Dijkstra_2(g,vertex);
+        clock_gettime(CLOCK_MONOTONIC, &tend);
+        printf("Dijkstra_2 took about %.5f seconds\n",
+           ((double)tend.tv_sec + 1.0e-9*tend.tv_nsec) -
+           ((double)tstart.tv_sec + 1.0e-9*tstart.tv_nsec));
 
-        fprintf(fpt2,"%d %f\n", edge,time_spent);
+        printf("%lf\n",time_spent);
+        fprintf(fpt2,"%d %f\n", edge,((double)tend.tv_sec + 1.0e-9*tend.tv_nsec) -
+           ((double)tstart.tv_sec + 1.0e-9*tstart.tv_nsec));
 
         for(i=0 ; i<g.V ; i++)
             free(g.adj.matrix[i]);
