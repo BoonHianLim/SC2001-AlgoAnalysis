@@ -1,5 +1,7 @@
+#define _POSIX_C_SOURCE 199309L
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <limits.h>
 #include <time.h>
 #include <inttypes.h>
@@ -541,86 +543,105 @@ int main()
 
     /*int no_e = rand()%max_e + 1;
     printf("no_e: %d\n",no_e);*/
-    char *name1,*name2;
-    name1 = (char *) malloc (50*sizeof(char));
-    name1 = "data10000\\connectedPar1.csv";
-    name2 = (char *) malloc (50*sizeof(char));
-    name2 = "data10000\\connectedPar2.csv";
+    
+    for(int total_run = 8; total_run < 10; total_run++){
+        int length = snprintf( NULL, 0, "%d", total_run );
+        
+        char* str11 = malloc( length + 1 );
+        snprintf( str11, length + 1, "%d", total_run );
+        char str12[] = ".csv";
 
-    FILE *fpt1,*fpt2;
-    fpt1 = fopen(name1, "w+");
-    fpt2 = fopen(name2, "w+");
+        
+        char name1[50] = "edges5000A\\Algo1_";
+        strcat(name1,str11);
+        strcat(name1,str12);
 
-    for(int edge = 0;edge<=numEdges;edge+=numEdges/20){
+        char* str21 = malloc( length + 1 );
+        snprintf( str21, length + 1, "%d", total_run );
+        char str22[] = ".csv";
+        
+        char name2[50] = "edges5000A\\Algo2_";
+        strcat(name2,str21);
+        strcat(name2,str22);
 
-        printf("%d:\n",edge);
-        g.E = 0;
-        g.adj.matrix = (int **)malloc(g.V*sizeof(int *));
-        for(i=0 ; i<g.V ; i++)
-            g.adj.matrix[i] = (int *)malloc(g.V*sizeof(int));
-        for(i=0 ; i<g.V ; i++)
-            for(j=0 ; j<g.V ; j++)
-                g.adj.matrix[i][j] = 0;
-        g.type = ADJ_MATRIX;
+        FILE *fpt1,*fpt2;
+        fpt1 = fopen(name1, "w+");
+        fpt2 = fopen(name2, "w+");
+        for(int curVertex = 4200; curVertex <= 10000; curVertex += 10000/50){
+            g.V = curVertex;
+            for(int edge = 5000;edge<=5000;edge+=5000/5){
+
+                printf("%d:\n",curVertex);
+                g.E = 0;
+                g.adj.matrix = (int **)malloc(g.V*sizeof(int *));
+                for(i=0 ; i<g.V ; i++)
+                    g.adj.matrix[i] = (int *)malloc(g.V*sizeof(int));
+                for(i=0 ; i<g.V ; i++)
+                    for(j=0 ; j<g.V ; j++)
+                        g.adj.matrix[i][j] = 0;
+                g.type = ADJ_MATRIX;
+                //printGraphMatrix(g);
+
+                degreeV = (int *)malloc(g.V*sizeof(int));
+                for(i=0 ; i<g.V ; i++)
+                    degreeV[i] = 0;
+
+
+
+                //printf("Partial Connected\n");
+                totalRand(g,edge);
+
+                        //printGraphMatrix(g);
+                //printf("Dijkstra 1:\n");
+
+                time_t t1;
+                srand( (unsigned) time (&t1));
+                uint64_t vertex;
+                vertex = rand();
+                vertex = (vertex << 32) | rand();
+                vertex = (vertex % (g.V - 0)) + 0;
+
+                clock_gettime(CLOCK_MONOTONIC, &tstart);
+                Dijkstra_1(g,vertex);
+                clock_gettime(CLOCK_MONOTONIC, &tend);
+                printf("Dijkstra_1 took about %.5f seconds\n",
+                ((double)tend.tv_sec + 1.0e-9*tend.tv_nsec) -
+                ((double)tstart.tv_sec + 1.0e-9*tstart.tv_nsec));
+
+                //printf("%f\n",time_spent);
+                fprintf(fpt1,"%d %f\n",curVertex,((double)tend.tv_sec + 1.0e-9*tend.tv_nsec) -
+                ((double)tstart.tv_sec + 1.0e-9*tstart.tv_nsec));
+
+
+                //printf("\n");
+                adjM2adjL(&g);
+                //printGraphList(g);
+                //printf("Dijkstra 2:\n");
+
+                clock_gettime(CLOCK_MONOTONIC, &tstart);
+                Dijkstra_2(g,vertex);
+                clock_gettime(CLOCK_MONOTONIC, &tend);
+                printf("Dijkstra_2 took about %.5f seconds\n",
+                ((double)tend.tv_sec + 1.0e-9*tend.tv_nsec) -
+                ((double)tstart.tv_sec + 1.0e-9*tstart.tv_nsec));
+
+                //printf("%lf\n",time_spent);
+                fprintf(fpt2,"%d %f\n",curVertex,((double)tend.tv_sec + 1.0e-9*tend.tv_nsec) -
+                ((double)tstart.tv_sec + 1.0e-9*tstart.tv_nsec));
+
+                for(i=0 ; i<g.V ; i++)
+                    free(g.adj.matrix[i]);
+                free(g.adj.matrix);
+                free(degreeV);
+            }
+
+        }
+        fclose(fpt1);
+        fclose(fpt2);
         //printGraphMatrix(g);
 
-        degreeV = (int *)malloc(g.V*sizeof(int));
-        for(i=0 ; i<g.V ; i++)
-            degreeV[i] = 0;
-
-
-
-        //printf("Partial Connected\n");
-        totalRand(g,edge);
-
-                //printGraphMatrix(g);
-        //printf("Dijkstra 1:\n");
-
-        time_t t1;
-        srand( (unsigned) time (&t1));
-        uint64_t vertex;
-        vertex = rand();
-        vertex = (vertex << 32) | rand();
-        vertex = (vertex % (g.V - 0)) + 0;
-
-        clock_gettime(CLOCK_MONOTONIC, &tstart);
-        Dijkstra_1(g,vertex);
-        clock_gettime(CLOCK_MONOTONIC, &tend);
-        printf("Dijkstra_1 took about %.5f seconds\n",
-           ((double)tend.tv_sec + 1.0e-9*tend.tv_nsec) -
-           ((double)tstart.tv_sec + 1.0e-9*tstart.tv_nsec));
-
-        //printf("%f\n",time_spent);
-        fprintf(fpt1,"%d %f\n", edge,((double)tend.tv_sec + 1.0e-9*tend.tv_nsec) -
-           ((double)tstart.tv_sec + 1.0e-9*tstart.tv_nsec));
-
-
-        //printf("\n");
-        adjM2adjL(&g);
-        //printGraphList(g);
-        //printf("Dijkstra 2:\n");
-
-        clock_gettime(CLOCK_MONOTONIC, &tstart);
-        Dijkstra_2(g,vertex);
-        clock_gettime(CLOCK_MONOTONIC, &tend);
-        printf("Dijkstra_2 took about %.5f seconds\n",
-           ((double)tend.tv_sec + 1.0e-9*tend.tv_nsec) -
-           ((double)tstart.tv_sec + 1.0e-9*tstart.tv_nsec));
-
-        printf("%lf\n",time_spent);
-        fprintf(fpt2,"%d %f\n", edge,((double)tend.tv_sec + 1.0e-9*tend.tv_nsec) -
-           ((double)tstart.tv_sec + 1.0e-9*tstart.tv_nsec));
-
-        for(i=0 ; i<g.V ; i++)
-            free(g.adj.matrix[i]);
-        free(g.adj.matrix);
-        free(degreeV);
+        /*printf("Enter the source node: ");
+        scanf("%d",&source);*/
     }
-    fclose(fpt1);
-    fclose(fpt2);
-    //printGraphMatrix(g);
-
-    /*printf("Enter the source node: ");
-    scanf("%d",&source);*/
 }
 
